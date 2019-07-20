@@ -1,0 +1,383 @@
+---
+title: "Introducción Rápída a R"
+author: "Irán Apolinar Peredo Cortes"
+date: "18 de julio de 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introducción
+
+A continuación se mostrarán los comando básicos en R necesarios para poder tener un conocimeinto básico del uso de las librerías básicas en cursos introductorios de estadística. Estas notas se desarrollarán mostrando el conjunto de código que se introduce en R así como su respectiva salida, por tal motivo no es necesario para su revisión la instalación y el uso de R, sin embargo en el momento de correr programas si será necesario. Se recomeinda tenerlo instalado y practicar para que la lectura subsecuente sea fluida. Estas notas así como las bases de datos utilizadas estarán disponibles en el siguiente enlace: <https://github.com/IranNash/>.
+
+En R podemos llamar a librerías con el comando `library()`, así como instalar paquetes con `install.packages()`. Para solicitar información de un comando podemos utilizar `help()`. Podemos introducir conentarios dentro del código anteponiendo un `#` al comentario sin que afecte la ejecución. 
+
+**Operaciones Básicas:** definimos a = 10, b = 20 y c = 30.
+```{r}
+a<-10
+b<-20
+c<-15
+```
+La asignación de valores en R se da mediante el simbolo `<-`, tambien puede ser utilizado el simbolo `=`. La suma, resta multiplización y división utilizan `+, -, *` y `/` respectivamente. La jerarquía de operaciones puede ser definitida utilizando parentesis.
+```{r}
+a+b
+a-b
+a*b
+a/b
+a+((b/c)*(c-a))*a
+```
+Para **imprimir texto** en pantalla utilizamos el comando `print()`, tambien se puede utilizar para mostrar el valor guardado en variables. Podemos concatenar texto con variables con los comandos `paste()` o conatenar texto con varias variables u operaciones con el comando `sprintf()`y `%s` como sigue:
+```{r}
+print("Hola")
+print(a)
+print(paste("el dato a vale:", a))
+sprintf("la suma de a + b es %s,y la de a-b es %s",a+b, a-b)
+```
+Para introducir **datos boleanos**, es decir, que tienen como salida verdadero o falso utilizamos los operadores `<,>,==, >= o <=`. Tamien es posible guardar un dato boleano mediante `<-` y luego imprimirlo en pantalla con `print()` como sigue:
+```{r}
+a == 10
+b >= 20
+c < a
+d <- a == 20
+print(a)
+```
+El **módulo o residuo** de una división se optiene con el comando `%%`. Para **truncar** a enteros un número se utiliza el comando `trunc()`:
+```{r}
+a <- 41
+a%%2
+trunc(14.98765)
+```
+Cuando se realizan programas es común solicitar la introducción de datos desde el teclado y que se almacene en alguna variable. Para poder introducir datos numéricos en R utilizamos el comando `scan` se debe especificar el número de datos a introducir. Para introducir datos de texto utilizamos junto con `scan` el comando `what` y especificamos que el tipo de datos es un character (este ejemplo se recomienda correrlo en su terminal de R).
+```{r}
+d<-scan(n=1)
+print(d)
+ch<-scan(n=1, what = "character")
+print(ch)
+```
+Las condicionales en R utiliza el comando `if(){}` y `else{}`, se establece la condición entre parentesis `()` y finalmente entre llaves `{}` se introduce lo que debe de realizarse si se cumple la condición. Por ejemplo, supongamos que `a` es igual a 10. Si esto se cumple entonces de imprime el texto `a es igual a 10`. Para este ejemplo utilizamos el operador `==` que se utiliza para *preguntar* si una variable es igual a otra, en este caso, si una variable es igual a un número:
+```{r}
+a <- 10
+if (a == 10){
+  print("a es igual a 10")
+}
+```
+
+Hagamos ahora un ejemplo más complejo. Supongamos que `a = 10` y que `b = 20` y definamos dos variables auxiliares `h = 0` y `g = 0`. Preguntemos ahora si `a < 5` de ser verdad, entonces solicitamos que se realice la operación `a * b` y que el resultado se guarde en `h`. De ser falsa la afirmación entonces queremos que se realice una resta `a - b` y que se guarde en `g`. Finalmente queremos que muestre en pantalla el valor final de `h` y `g`. El código para este ejemplo es el siguiente:
+```{r}
+a<-10
+b<-20
+h<-0
+g<-0
+if(a>5){
+  h<-a*b
+}else{
+  g<-a-b
+}
+print(h)
+print(g)
+```
+En R se pueden utilizar ttres tipos de **ciclos(bucles o loops)**. Utilizamos el comando `while(){}` para que un ciclo se repita mientras se cumple una condición. Normalmente este tipo de ciclos utiliza contadores, es decir, variables auxiliares donde especificamos donde empieza a contar el ciclo. Dentro del ciclo generalmente especificamos los incrementos del contador. Finalmente el ciclo se repetirá hasta que el contador cumpla la condición.
+
+Por ejemplo, realicemos un ciclo que permita repetir 8 veces la frase `mi primer ciclo en R`. El código para este ejemplo es como sigue:
+```{r}
+i <- 1
+while(i <= 8){
+  print("mi primer ciclo en R")
+  i = i +1
+}
+```
+Si leyeramos el código este diría "definimos un contador `i = 1`. Mientras el contador `i` sea menor o igual a `8`" entonces imprime `mi primer ciclo en R`. Ahora suma al contador `i` una unidad para que en el siguiente ciclo valga 2" y así sucesivamente.
+
+Realicemos el mismo ejemplo con un ciclo `for(){}`. en este caso definimos dentro de la condición el contador y le decimos el rango que va a recorrer. Finalmente le decimos en que hacer en cada ciclo. el código para realizar el mismo ejercicio es el siguiente:
+
+```{r}
+for(i in 1:8){
+  print("mi primer ciclo en R")
+}
+```
+Como podemos ver el código es más simple. Tenemos un contador `i`  que va a recorrer de 1 a 8, es decir, ocho veces se repetirá la instrucción `print("mi primer ciclo en R")` se sabe que son 8 porqué se a espesificado con el código `in 1:8` para comprobarlo basta con imprimir `i` en pantalla
+```{r}
+print(i)
+```
+##Vectores y Matrices
+
+Podemos crear un vector con el comando `c()` y asignarlo a una variable. Podemos hacer una secuencia de numeros dentro de un vector utilizando la nomenclatura `c(j:k)` para que el vector tome los valores de `j` hasta`k`. Tambien es posible crear un vector de ceros con el comando `numeric()` especificando el número de ceros, es decir el tamaño del vector:
+```{r}
+x<-c(1,2,3,4,5)
+print(x)
+
+x<-c(5:10)
+print(x)
+
+x<- numeric(5)
+print(x)
+```
+Para buscar un dato específico dentro del vector utilizamos la nomenclatura `x[i]` donde `i` es la posición del elemento que buscamos. Podemo extraer más de un nímero con el comando `c(i,j,k)` donde `ì`, `j`, `k` nos muestran la posición de los datos a extraer:
+```{r}
+x<-c(3,4,5,6,7,8,9,10,11)
+print(x)
+x[2]
+x[c(2,4,6)]
+```
+Podemos realiza operaciones aritméticas con los elementos de un vector como restarle o sumarle un número a cada elemento, multiplicar cada elemento por un número dado o elevar cada elemento a una cierta potencia:
+```{r}
+x<-c(1,2,3,4,5,6,7,8,9)
+print(x)
+x+5 #resta
+x-3 #suma
+x*2 #multiplicación
+x^2 #potencia
+```
+Estas mismas operaciones pueden realizarse entre vectores, por ejemplo:
+```{r}
+x<-c(1,2,3,4,5,6,7,8,9)
+y<-c(3,4,5,6,7,8,9,10,11)
+x+y
+x-y
+x*y
+x^y
+```
+Podemos tambien crear vectores de caracteres, por ejemplo, supongamos que queremos introducir en un vector el genero de 9 personas, bastaría con introducir entre comillas `" "` el caracter correspondiente. 
+```{r}
+sexo <- c("hombre", "mujer", "mujer", "otro", "hombre", "hombre", "mujer", "mujer", "otro")
+print(sexo)
+```
+En la practica es común preguntarse si la variable es un factor, esto permite crear categorías dentro del vector. Para esto utilizamos el comando `is.factor()` para comprobar si es factor y `as.factor()` para transformar.
+```{r}
+is.factor(sexo)
+sexo<-as.factor(sexo)
+is.factor(sexo)
+```
+Como vemos en la prmera salida `is.factor(sexo)` muestra un `FALSE` lo que significa que no es un factor, es decir, el vector no tiene categorías. Posteriormente con el comando `as.factor(sexo)` se vuelve a guardar en `sexo` con lo cual remplazamos la variable original por la variable con factores. Ahora si mandamos a imprimir `sexo` tenemos:
+```{r}
+print(sexo)
+```
+nos muestra los tres niveles. Esto será importante cuando se trabaje con variables categóricas.Podemos generar una **matriz** a partir de combinación de varios vectores o contruirla directamente. Para el primer caso. Supongamos que creamos un vector con las estaturas de 9 personas, como en el caso anterior:
+```{r}
+est<-c(1.85, 1.64, 1.56, 1.71, 1.79, 1.81, 1.56, 1.63, 1.69)
+print(est)
+```
+Con el comado `rbind()` podemos combinar dos vectores y ordenarlos como filas. Con el comando `cbind()` hacemos los mismo pero lo ordenamos como columnas.
+```{r}
+A<-cbind(sexo, est)
+print(A)
+B<-rbind(sexo, est)
+print(B)
+```
+Como puede observarse la variable `sexo` ha sido remplazada por numero del 1 al 3, esto significa que se ha asignado la categoría correspondiente. Esto es útil en el momento de hacer modelos o gráficos.
+
+Para hacer una matriz directamente utilizamos el comando `matrix()` en el cual establecemos el número de filas `nrow` y el número de columnas `ncol` los datos de la matriz se introducen como si fuera un vector. La dimensión de la matriz se muestra con el comando `dim()`
+```{r}
+A <- matrix(c(1,2,3,4,5,6), nrow = 2, ncol = 3)
+print(A)
+dim(A)
+```
+
+Las operaciones operaciones elementales con matrices se realizan de la siguiente forma:
+```{r}
+A <- matrix(c(1,2,3,4), nrow = 2, ncol = 2)
+B <- matrix(c(10,11,12,13), nrow = 2, ncol = 2)
+t(A) #Transpuesta
+A*3  #Multiplicación Escalar
+A+B  #Suma de matrices
+A-B  #Resta de matrices
+A%*%B  #Producto Matricial
+solve(A) #Matriz Inversa
+```
+
+La matriz identidad se logra con el comando `diag()` donde especificamos el tamaño de la matriz. Por ejemplo una matriz identidad de 5x5 se realiza como:
+```{r}
+diag(5)
+```
+##Dataframe
+Un data frame es un arreglo rectangular que permite almacenar distintos tipos de datos, tanto numéricos como de caracter. Una forma sencilla de hacerlo es a partir de vectores, por ejemplo:
+```{r}
+sexo <- c("hombre", "mujer", "mujer", "otro", "hombre", "hombre", "mujer", "mujer", "otro")
+est<-c(1.85, 1.64, 1.56, 1.71, 1.79, 1.81, 1.56, 1.63, 1.69)
+edad <- c(18, 20, 23, 25, 22, 18, 17, 19, 20)
+data <- data.frame(sexo, est, edad)
+print(data)
+```
+La estructura de los datos se obtiene con el comando `str()`:
+```{r}
+str(data)
+```
+Las estadísticas básicas del dataframe se obtiene con el comando `summary()`:
+```{r}
+summary(data)
+```
+
+Podemos guardar los datos en formato .txt con el comando `write.table`. Se debe especificar el nombre del archivo así como el tipo de separación de los datos y si tiene o no encabezado entre otras definiciones, como sigue:
+```{r}
+write.table(data, file = "data.txt", sep = ",", col.names = TRUE)
+```
+Para poder llamar una base de datos podemo utilizar `read.table()` si es en formato `.txt`. Podemos llamar un `.csv` con `read.csv()`. Recordemos que para tener todas las especificaciones del comando basta con teclear `help("read.csv")` para tener todas las funciones.
+```{r}
+data<-read.table("data.txt", header = TRUE, sep = ",")
+```
+```{r}
+help("read.csv")
+```
+Para llamar una variable específica dentro del data.frame utilizamos el simbolo `$` después del nombre del data.frame.
+```{r}
+data$sexo
+```
+
+```{r}
+summary(data$est)
+```
+Finalmente, cuando se trabajan con bases de datos con muchas variables, puede llegar a ser complicado utilizar el simbolo `$` anteponiendolo al nombre de la base para llamar variables. En su lugar podemos utilizar el comando `attach()`
+```{r}
+attach(data)
+```
+
+```{r}
+summary(est)
+```
+Para regresar a la forma de llamar los datos originalmente con `$` utilizamos `detach()`
+```{r}
+detach(data)
+```
+
+##Gráficos básicos
+En R existen muchas posibilidades de hacer gráficos, podemos utilizar los gráficos nativos de R o utilizar librerías como `ggplot2`. Para esta introducción rápida vamos a mostrar los gráficos nativos de R.
+
+El gráfico de dispersión puede realizarse cimplemente dando dos variables con la función `plot()`, por ejemplo:
+```{r}
+attach(data)
+plot(est, edad)
+```
+
+Podemos darle formato a los gráficos nativos en R de la siguiente forma:
+```{r}
+plot(est, edad,
+     type = "p",
+     pch = 10,
+     col = "blue",
+     main = "Título del gráfico", 
+     sub= "Subtitulo del Gráfico",
+     xlab = "nombre de la variable x",
+     ylab = "nombre de la variable y")
+```
+
+```{r} 
+# histograma
+hist(edad,
+     col = "gray",
+     main = "histograma", 
+     sub= "Subtitulo del Gráfico",
+     xlab = "nombre de la variable x",
+     ylab = "nombre de la variable y")
+```
+
+Para utilizar el gráfico de barras o el gráfico de pastel se realiza una tabla con el comando `table()` ya que se trata de datos categóricos.
+```{r}
+#Gráfico de barras
+barplot(table(sexo),
+     main = "Título del gráfico", 
+     sub= "Subtitulo del Gráfico",
+     xlab = "nombre de la variable x",
+     ylab = "nombre de la variable y")
+```
+
+```{r}
+#Gráfico de pastel
+pie(table(sexo),
+     main = "Título del gráfico", 
+     sub= "Subtitulo del Gráfico",
+     xlab = "nombre de la variable x",
+     ylab = "nombre de la variable y")
+```
+
+Para realizar un el gráfico de cajas, enfrentamos una variable categórica contra una variable continua, es por eso que se expresa como un modelo, es decir, utilizamos el simbolo `~`.
+```{r}
+#Gráfico de Cajas
+boxplot(edad~sexo,
+     col = "gray",
+     main = "Título del gráfico", 
+     sub= "Subtitulo del Gráfico",
+     xlab = "nombre de la variable x",
+     ylab = "nombre de la variable y")
+```
+
+Para hacer gráficos de lineas podemo utilizar tambien la función `plot()`. Con el comando `rnorm()` podemos generar numeros aleatorios basados en la distribución normal.
+```{r}
+x<-rnorm(50, 0, 1) #media 0, varianza 1
+plot(x,
+     type = "l",
+     col = "blue",
+     main = "Título del gráfico", 
+     sub= "Subtitulo del Gráfico",
+     xlab = "nombre de la variable x",
+     ylab = "nombre de la variable y")
+```
+
+## Aplicación: Calculo de mínimos cuadrados ordinarios
+
+Apliquemos parte de los aprendido, realicemos el calculo de regresión lineal mediante un modelo por aproximación de mínimos cuadrados ordinarios $\mathbf{y =\theta x + \epsilon}$. Este modelo se basa en aproximar una variable minimizando el error cuadrático. primero definamos la matriz de coeficientes:
+```{r}
+x <-c(600, 600, 700, 700, 700, 900, 950, 950) #variable independiente
+i <-c(1,1,1,1,1,1,1,1)
+X <-cbind(i,x) #Matriz de coeficientes
+print(X) 
+y <-c(40, 44, 48, 46, 50, 48, 46, 45) #variable de respuesta
+```
+
+El vector $\mathbf{\theta}$ que minimizan el error cuadrático medio se calcula evaluando $\mathbf{\theta=(X'X)^{-1}X'y}$ se calculo así:
+```{r}
+#Transponer
+Xt<-t(X)
+#Producto Matricial
+B<-Xt%*%X
+#Invertir la matriz
+C<-solve(B)
+#Producto matricial
+D<-C%*%Xt
+u<-D%*%y
+print(u)
+```
+
+En la práctica, la solución del modelo de mínimos cuadrados se hace mediante el comando `lm()` de la siguiente manera:
+```{r}
+m <- lm(y~x)
+summary(m)
+```
+Para realizar el gráfico utilizamos `plot()`
+```{r}
+plot(x,y, type = "p", 
+     xlab = "x", 
+     ylab = "y",
+     main="Regresión Lineal Simple")
+abline(m, col="blue")
+```
+
+Realicemos ahora el mismo ejercicio matricial pero agreguemos un ajuste cuadrático:
+```{r}
+x <-c(600, 600, 700, 700, 700, 900, 950, 950) #variable independiente
+i <-c(1,1,1,1,1,1,1,1)
+x2 <- x^2
+X <-cbind(i,x, x2) #Matriz de coeficientes
+y <-c(40, 44, 48, 46, 50, 48, 46, 45) #variable de respuesta
+#Transponer
+Xt<-t(X)
+#Producto Matricial
+B<-Xt%*%X
+#Invertir la matriz
+C<-solve(B)
+#Producto matricial
+D<-C%*%Xt
+u<-D%*%y
+print(u)
+```
+
+La grafica correspondiente se puede hacer mediante el comando `curve()`. Se espesifica con `from =` y `to =` los límites de la curva en el eje de las x. Con `add =` especificamos si se quiere superponer a la gráfica anterior.:
+```{r}
+plot(x,y, type = "p", xlab = "x", ylab = "y",
+     main="Regresión con ajuste cuadrático")
+b<-curve(u[1]+u[2]*x + u[3]*x^2, from = 600, to=1000, add = TRUE, col="blue")
+```
+
+Este ajuste cuadrático para este caso es mejor que el ajuste lineal.
