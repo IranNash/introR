@@ -2,7 +2,9 @@
 title: "Introducción Rápída a R"
 author: "Irán Apolinar Peredo Cortes"
 date: "iranapolinar@hotmail.com"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
